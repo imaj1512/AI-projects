@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-index.css') }}">
+
+</head>
+<body>
+    <div class="cont">
+        <h1 style="color: white;">Stock Market Trend Predictor</h1>
+        
+        <div class="auth-links">
+            {% if session.get("username") %}
+                <p style="color: white;">Welcome, {{ session.get("username") }}!</p>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn">Login</a>
+            {% endif %}
+        </div>    
+        
+        
+      
+        
+        <div class="form-cont">
+        <form method="POST" action="/">
+            <label for="stock_id" style="color: white;">Enter Stock ID (e.g., GOOG, AMZN):</label>
+            <div class="cd">
+                <input type="text" id="stock_id" name="stock_id" placeholder="Enter stock ID">
+                <button type="submit">Predict</button>
+            </div>
+        </form>
+        </div>
+        {% if error_message %}
+        <div id="error-modal" class="modal">
+            <div class="modal-content">
+                <p>{{ error_message }}</p>
+                <button onclick="closeModal()">Close</button>
+            </div>
+        </div>
+        {% endif %}
+    
+        <script>
+            // Show modal on page load if error_message exists
+            window.onload = function() {
+                const modal = document.getElementById("error-modal");
+                if (modal) {
+                    modal.style.display = "block";
+                }
+            };
+    
+            // Close the modal
+            function closeModal() {
+                const modal = document.getElementById("error-modal");
+                if (modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+        </script>   
+    </div>
+</body>
+</html>
+

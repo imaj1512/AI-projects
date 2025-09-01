@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/styles-result.css">
+    <title>Stock Prediction Results</title>
+</head>
+
+<body>
+    {% if session.get("username") %}
+    <div class="go-back">
+        <a href="{{ url_for('back_to_index') }}">predict again</a>
+    </div>
+    {% endif %}
+
+    <div class="auth-links">
+        {% if session.get("username") %}
+            <p class="welcome-text">Welcome, {{ session.get("username") }}!</p>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <p style="color: red;">You are not logged in. <a href="{{ url_for('login') }}">Login here</a></p>
+        {% endif %}
+    </div>
+
+    {% if session.get("username") %}
+    <div class="content">
+        <h1>Prediction Results</h1>
+
+        {% if error_message %}
+        <h2 style="color: red;">{{ error_message }}</h2>
+        {% else %}
+            <h2>Predicted Closing Prices for the Next 10 Days</h2>
+            <ul>
+                {% for entry in predictions %}
+                <li><strong>{{ entry.Date }}</strong>: {{ entry.Predicted }}</li>
+                {% endfor %}
+            </ul>
+
+            {% if plots.next_1_day %}
+            <div class="plot">
+                <h3>Next 1-Day Prediction</h3>
+                <img src="data:image/png;base64,{{ plots.next_1_day }}" alt="Next 1-Day Prediction">
+            </div>
+            {% else %}
+            <p style="color: red;">Next 1-Day Prediction graph is missing.</p>
+            {% endif %}
+        
+           
+            <h2>Next 10 Days Prediction Graph</h2>
+            <img src="data:image/png;base64,{{ plots.next_10_days }}" alt="Next 10 Days Prediction">
+        
+            
+
+            {% if plots.actual_vs_predicted %}
+            <div class="plot">
+                <h3>Actual vs Predicted Prices</h3>
+                <img src="data:image/png;base64,{{ plots.actual_vs_predicted }}" alt="Actual vs Predicted Prices">
+            </div>
+            {% else %}
+            <p style="color: red;">Actual vs Predicted Prices graph is missing.</p>
+            {% endif %}
+
+            {% if plots.closing_prices %}
+            <div class="plot">
+                <h3>Closing Prices</h3>
+                <img src="data:image/png;base64,{{ plots.closing_prices }}" alt="Closing Prices">
+            </div>
+            {% else %}
+            <p style="color: red;">Closing Prices graph is missing.</p>
+            {% endif %}
+
+            {% if plots.moving_averages %}
+            <div class="plot">
+                <h3>Moving Averages</h3>
+                <img src="data:image/png;base64,{{ plots.moving_averages }}" alt="Moving Averages">
+            </div>
+            {% else %}
+            <p style="color: red;">Moving Averages graph is missing.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
+
+   
+</body>
+</html>
+
+
